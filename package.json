@@ -1,0 +1,19 @@
+{
+  "name": "stockapp",
+  "version": "1.0.0",
+  "description": "stock app ",
+  "main": "stock_app.js",
+  "scripts": {
+  "start": "node stock_app.js"
+},
+  "repository": {
+  "type": "git",
+  "url": ""
+},
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+  "url": ""
+},
+  "homepage": ""
+}
