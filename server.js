@@ -54,7 +54,7 @@ http.createServer(function (req, res) {
             if (results.length > 0) {
               results.forEach(doc => {
                 html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
-                cons += `Name: ${doc.name}, Ticker: ${doc.ticker}, Price: $${doc.price}`;
+                cons += `Name: ${doc.name}, Ticker: ${doc.ticker}, Price: $${doc.price} \n`;
               });
             } else {
               html += "<p>No matching results found.</p>";
