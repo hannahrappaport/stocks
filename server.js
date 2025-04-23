@@ -50,17 +50,17 @@ http.createServer(function (req, res) {
             const results = await collection.find(search).toArray();
       
             let html = `<h2>Search Results:</h2>`;
-            //let cons = ``;
+            let cons = ``;
             if (results.length > 0) {
               results.forEach(doc => {
                 html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
-                //cons += `Name: ${doc.name}, Ticker: `;
+                cons += `Name: ${doc.name}, Ticker: ${doc.ticker}, Price: $${doc.price}`;
               });
             } else {
               html += "<p>No matching results found.</p>";
             }
             
-            console.log(html);
+            console.log(cons);
             res.write(html);
             res.end();
       
