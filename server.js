@@ -3,6 +3,11 @@ var url = require('url');
 var port = process.env.PORT || 3000;
 //var port = 8080;   //uncomment to run local
 console.log("This goes to the console window");
+
+const uri = "mongodb+srv://dbUser:dbUserPassword@cluster0.wla0wbi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const { MongoClient } = require('mongodb');
+const client = new MongoClient(uri);
+
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'});
   urlObj = url.parse(req.url,true)
@@ -13,30 +18,69 @@ http.createServer(function (req, res) {
          "Enter ticker or company name <input type='text' name='name' required><br><label><input type='radio' name='type' value='ticker' required> Ticker Symbol</label><input type='radio' name='type' value='company' required> Company Name</label><br><button type='submit'>Search</button></form>"
 
 
-
-
      res.write(s)
      res.end()
   }
-  else if (urlObj.pathname == "/process") {
-  id = urlObj.query.id
+    
+    
+    else if (urlObj.pathname == "/process") {
+        console.log("Processing search...");
+      
+        async function processSearch() {
+          try {
+            await client.connect();
+            const collection = client.db("your-db-name").collection("PublicCompanies");
+      
+            const searchQuery = urlObj.query.name;
+            const type = urlObj.query.type;
+      
+            let search = {};
+            if (type === "ticker") {
+              search = { ticker: { $regex: searchQuery, $options: 'i' } };
+            } else if (type === "company") {
+              search = { name: { $regex: searchQuery, $options: 'i' } };
+            }
+      
+            const results = await collection.find(search).toArray();
+      
+            let html = `<h2>Search Results:</h2>`;
+            if (results.length > 0) {
+              results.forEach(doc => {
+                html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
+              });
+            } else {
+              html += "<p>No matching results found.</p>";
+            }
+      
+            res.write(html);
+            res.end();
+      
+          } catch (err) {
+            console.error("Error during DB search:", err);
+            res.write("An error occurred.");
+            res.end();
+          } finally {
+            await client.close();
+          }
+        }
+      
+        processSearch();
+      }
+      
+    
+
   
-  res.write ("The id is: " + id)
-  res.end();
-  console.log('hey')
-  }
+  
 }).listen(port);
 
 // require('dotenv').config();
 // const express = require('express');
 // const path = require('path');
-// const { MongoClient } = require('mongodb');
+ 
 
 // const app = express();
 // const PORT = process.env.PORT || 3000;
 
-// const uri = "mongodb+srv://dbUser:dbUserPassword@cluster0.wla0wbi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-// const client = new MongoClient(uri);
 
 // // Serve static HTML
 // app.get('/', (req, res) => {
@@ -67,6 +111,8 @@ http.createServer(function (req, res) {
 //         console.log(`Name: ${doc.name}, Ticker: ${doc.ticker}, Price: $${doc.price}`);
 //       });
 //     }
+// }
+// })
 
 //     // For extra credit: show results in browser
 //     let html = `<h1>Results</h1>`;
