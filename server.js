@@ -8,11 +8,20 @@ http.createServer(function (req, res) {
   urlObj = url.parse(req.url,true)
   if (urlObj.pathname == "/") 
   {
-     res.write("<h2>This is my hello application</h2>");
-    //  s = "<form method='get' action='/process'>" +
-    //      "Enter the secret ID <input type='text' name='id'><br /><input type='submit'></form>"
-    //  res.write(s)
-    //  res.end()
+     res.write("<h2>Enter a stock ticker symbol or company name.</h2>");
+     s = "<form method='get' action='/process'>" +
+         "Enter ticker or company name <input type='text' name='name'><br /><input type='submit'></form>"
+
+
+{/* <input type="text" name="query" placeholder="Enter ticker or company name" required>
+    <label><input type="radio" name="type" value="ticker" required> Ticker Symbol</label>
+    <label><input type="radio" name="type" value="company" required> Company Name</label>
+    <button type="submit">Search</button> */}
+
+
+
+     res.write(s)
+     res.end()
   }
   else if (urlObj.pathname == "/process") {
   id = urlObj.query.id
