@@ -44,7 +44,8 @@ http.createServer(function (req, res) {
             if (type === "ticker") {
               search = { ticker: { $regex: searchQuery, $options: 'i' } };
             } else if (type === "company") {
-              search = { name: { $regex: searchQuery, $options: 'i' } };
+              //search = { name: { $regex: searchQuery, $options: 'i' } };
+              search = { name: { $regex: `^${searchQuery}$`, $options: 'i' } };
             }
       
             const results = await collection.find(search).toArray();
