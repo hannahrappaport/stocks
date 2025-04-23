@@ -10,7 +10,7 @@ http.createServer(function (req, res) {
   {
      res.write("<h2>Enter a stock ticker symbol or company name.</h2>");
      s = "<form method='get' action='/process'>" +
-         "Enter ticker or company name <input type='text' name='name'><br><label><input type='radio' name='type' value='ticker' required> Ticker Symbol</label><button type='submit'>Search</button></form>"
+         "Enter ticker or company name <input type='text' name='name'><br><label><input type='radio' name='type' value='ticker' required> Ticker Symbol</label><input type='radio' name='type' value='company' required> Company Name</label><button type='submit'>Search</button><br></form>"
 
 
 {/* <input type="text" name="query" placeholder="Enter ticker or company name" required>
