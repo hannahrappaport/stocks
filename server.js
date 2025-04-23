@@ -42,25 +42,25 @@ http.createServer(function (req, res) {
             const type = urlObj.query.type;
             res.write(searchQuery);
             res.write(type);
-            // let search = {};
-            // if (type === "ticker") {
-            //   search = { ticker: { $regex: searchQuery, $options: 'i' } };
-            // } else if (type === "company") {
-            //   search = { name: { $regex: searchQuery, $options: 'i' } };
-            // }
+            let search = {};
+            if (type === "ticker") {
+              search = { ticker: { $regex: searchQuery, $options: 'i' } };
+            } else if (type === "company") {
+              search = { name: { $regex: searchQuery, $options: 'i' } };
+            }
       
-            // const results = await collection.find(search).toArray();
+            const results = await collection.find(search).toArray();
       
-            // let html = `<h2>Search Results:</h2>`;
-            // if (results.length > 0) {
-            //   results.forEach(doc => {
-            //     html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
-            //   });
-            // } else {
-            //   html += "<p>No matching results found.</p>";
-            // }
+            let html = `<h2>Search Results:</h2>`;
+            if (results.length > 0) {
+              results.forEach(doc => {
+                html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
+              });
+            } else {
+              html += "<p>No matching results found.</p>";
+            }
       
-            // res.write(html);
+            res.write(html);
             res.end();
       
           } catch (err) {
