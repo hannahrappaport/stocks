@@ -22,7 +22,7 @@ http.createServer(function (req, res) {
   {
      res.write("<h2>Enter a stock ticker symbol or company name.</h2>");
      s = "<form method='get' action='/process'>" +
-         "Enter ticker or company name <input type='text' name='name' required><br><label><input type='radio' name='type' value='ticker' required> Ticker Symbol</label><input type='radio' name='type' value='company' required> Company Name</label><br><button type='submit'>Search</button></form>"
+         "Enter ticker or company name <input type='text' name='name' required><br><br><label><input type='radio' name='type' value='ticker' required> Ticker Symbol</label><input type='radio' name='type' value='company' required> Company Name</label><br><br><button type='submit'>Search</button></form>"
 
 
      res.write(s)
@@ -44,7 +44,6 @@ http.createServer(function (req, res) {
             if (type === "ticker") {
               search = { ticker: { $regex: searchQuery, $options: 'i' } };
             } else if (type === "company") {
-              //search = { name: { $regex: searchQuery, $options: 'i' } };
               search = { name: { $regex: `^${searchQuery}$`, $options: 'i' } };
             }
       
