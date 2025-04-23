@@ -29,7 +29,7 @@ http.createServer(function (req, res) {
         async function processSearch() {
           try {
             await client.connect();
-            const collection = client.db("your-db-name").collection("PublicCompanies");
+            const collection = client.db("Stock").collection("PublicCompanies");
       
             const searchQuery = urlObj.query.name;
             const type = urlObj.query.type;
