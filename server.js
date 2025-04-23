@@ -24,47 +24,65 @@ http.createServer(function (req, res) {
     
     
     else if (urlObj.pathname == "/process") {
-        console.log("Processing search...");
-      
-        async function processSearch() {
-          try {
-            await client.connect();
-            const collection = client.db("Stock").collection("PublicCompanies");
-      
-            const searchQuery = urlObj.query.name;
-            const type = urlObj.query.type;
-      
-            let search = {};
-            if (type === "ticker") {
-              search = { ticker: { $regex: searchQuery, $options: 'i' } };
-            } else if (type === "company") {
-              search = { name: { $regex: searchQuery, $options: 'i' } };
+        else if (urlObj.pathname == "/process") {
+            console.log("Processing search...");
+          
+            async function processSearch() {
+              try {
+                // Log the connection attempt
+                console.log("Connecting to MongoDB...");
+                await client.connect();
+          
+                const collection = client.db("your-db-name").collection("PublicCompanies");
+                console.log("Connected to MongoDB.");
+          
+                const searchQuery = urlObj.query.name;
+                const type = urlObj.query.type;
+          
+                if (!searchQuery || !type) {
+                  console.log("Missing required query parameters (name or type).");
+                  res.write("Please provide both 'name' and 'type'.");
+                  return res.end();
+                }
+          
+                let search = {};
+                if (type === "ticker") {
+                  search = { ticker: { $regex: searchQuery, $options: 'i' } };
+                } else if (type === "company") {
+                  search = { name: { $regex: searchQuery, $options: 'i' } };
+                } else {
+                  console.log("Invalid search type:", type);
+                  res.write("Invalid type. Use 'ticker' or 'company'.");
+                  return res.end();
+                }
+          
+                const results = await collection.find(search).toArray();
+                console.log("Search results:", results);
+          
+                let html = `<h2>Search Results:</h2>`;
+                if (results.length > 0) {
+                  results.forEach(doc => {
+                    html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
+                  });
+                } else {
+                  html += "<p>No matching results found.</p>";
+                }
+          
+                res.write(html);
+                res.end();
+          
+              } catch (err) {
+                console.error("Error during DB search:", err); // Log the specific error
+                res.write("An error occurred.");
+                res.end();
+              } finally {
+                await client.close();
+              }
             }
-      
-            const results = await collection.find(search).toArray();
-      
-            let html = `<h2>Search Results:</h2>`;
-            if (results.length > 0) {
-              results.forEach(doc => {
-                html += `<div><strong>${doc.name}</strong><br>Ticker: ${doc.ticker}<br>Price: $${doc.price}<br><br></div>`;
-              });
-            } else {
-              html += "<p>No matching results found.</p>";
-            }
-      
-            res.write(html);
-            res.end();
-      
-          } catch (err) {
-            console.error("Error during DB search:", err);
-            res.write("An error occurred.");
-            res.end();
-          } finally {
-            await client.close();
+          
+            processSearch();
           }
-        }
-      
-        processSearch();
+          
       }
       
     
