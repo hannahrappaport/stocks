@@ -40,8 +40,6 @@ http.createServer(function (req, res) {
       
             const searchQuery = urlObj.query.name;
             const type = urlObj.query.type;
-            res.write(searchQuery);
-            res.write(type);
             let search = {};
             if (type === "ticker") {
               search = { ticker: { $regex: searchQuery, $options: 'i' } };
@@ -59,7 +57,8 @@ http.createServer(function (req, res) {
             } else {
               html += "<p>No matching results found.</p>";
             }
-      
+            
+            console.log(html);
             res.write(html);
             res.end();
       
@@ -73,78 +72,8 @@ http.createServer(function (req, res) {
         }
       
         processSearch();
-      }
-      
-    
-
-  
+      } 
   
 }).listen(port);
 
-// require('dotenv').config();
-// const express = require('express');
-// const path = require('path');
- 
 
-// const app = express();
-// const PORT = process.env.PORT || 3000;
-
-
-// // Serve static HTML
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'views', 'home.html'));
-// });
-
-// // Process search (View 2)
-// app.get('/process', async (req, res) => {
-//   const { query, type } = req.query;
-
-//   try {
-//     await client.connect();
-//     const collection = client.db().collection('PublicCompanies');
-
-//     let search = {};
-//     if (type === 'ticker') {
-//       search = { ticker: { $regex: query, $options: 'i' } }; // Case-insensitive
-//     } else if (type === 'company') {
-//       search = { name: { $regex: query, $options: 'i' } };
-//     }
-
-//     const results = await collection.find(search).toArray();
-
-//     if (results.length === 0) {
-//       console.log("No matches found.");
-//     } else {
-//       results.forEach(doc => {
-//         console.log(`Name: ${doc.name}, Ticker: ${doc.ticker}, Price: $${doc.price}`);
-//       });
-//     }
-// }
-// })
-
-//     // For extra credit: show results in browser
-//     let html = `<h1>Results</h1>`;
-//     if (results.length > 0) {
-//       html += results.map(doc => `
-//         <div>
-//           <strong>${doc.name}</strong><br>
-//           Ticker: ${doc.ticker}<br>
-//           Price: $${doc.price}<br><br>
-//         </div>
-//       `).join('');
-//     } else {
-//       html += `<p>No results found.</p>`;
-//     }
-//     res.send(html);
-
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error searching database.");
-//   } finally {
-//     await client.close();
-//   }
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on http://localhost:${PORT}`);
-// });
