@@ -4,16 +4,21 @@
   "description": "stock app ",
   "main": "stock_app.js",
   "scripts": {
-  "start": "node stock_app.js"
-},
+    "start": "node stock_app.js"
+  },
   "repository": {
-  "type": "git",
-  "url": ""
-},
+    "type": "git",
+    "url": ""
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
-  "url": ""
-},
-  "homepage": ""
+    "url": ""
+  },
+  "homepage": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0"
+  }
 }
