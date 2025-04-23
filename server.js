@@ -4,9 +4,16 @@ var port = process.env.PORT || 3000;
 //var port = 8080;   //uncomment to run local
 console.log("This goes to the console window");
 
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://dbUser:dbUserPassword@cluster0.wla0wbi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const { MongoClient } = require('mongodb');
-const client = new MongoClient(uri);
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
 
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'});
